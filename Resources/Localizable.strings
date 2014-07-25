@@ -1,0 +1,13 @@
+/*
+  File.strings
+  WeatherWatcher
+
+  Created by Christopher Corea on 7/24/14.
+  Copyright (c) 2014 BamBamProd. All rights reserved.
+*/
+
+"MapPageTitle"="Weather Map";
+"MapSearchBarPlaceholderText"="Zip Code or District (SF)";
+"MapSearchBarAccessibilityLabel"="Enter Zip Code or, if in San Francisco, District Name";
+"SearchResultCellIdentifier"="Search Result Cell Identifier";
+"DistrictCellIdentifier"="District Cell Identifier";
