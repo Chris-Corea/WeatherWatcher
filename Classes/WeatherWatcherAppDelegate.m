@@ -31,6 +31,8 @@
     id navigationBarAppearance = [UINavigationBar appearance];
     [navigationBarAppearance setBackgroundImage:[UIImage imageNamed:@"nav-bar-background"] forBarMetrics:UIBarMetricsDefault];
     [navigationBarAppearance setTitleTextAttributes:[self getTitleTextAttributes]];
+
+    id barButtonItemAppearance = [UIButton]
 }
 
 - (NSDictionary *)getTitleTextAttributes {

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4A71D28319819713001F11D0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4A71D28219819713001F11D0 /* Localizable.strings */; };
-		4A71D2861981A080001F11D0 /* near-me.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A71D2841981A080001F11D0 /* near-me.png */; };
-		4A71D2871981A080001F11D0 /* near-me@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A71D2851981A080001F11D0 /* near-me@2x.png */; };
 		4AB954341948FAFD009309B6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB954331948FAFD009309B6 /* Foundation.framework */; };
 		4AB954361948FAFD009309B6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB954351948FAFD009309B6 /* CoreGraphics.framework */; };
 		4AB954381948FAFD009309B6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB954371948FAFD009309B6 /* UIKit.framework */; };
@@ -31,6 +29,8 @@
 		4AB954871948FC65009309B6 /* nav-bar-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB9547C1948FC65009309B6 /* nav-bar-background.png */; };
 		4AB954881948FC65009309B6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AB9547D1948FC65009309B6 /* Images.xcassets */; };
 		4AB954891948FC65009309B6 /* WeatherWatcher-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4AB9547E1948FC65009309B6 /* WeatherWatcher-Info.plist */; };
+		A796390BAF6F92FADDE405D5 /* near-me@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7963B87F42DD0074C635CD8 /* near-me@2x.png */; };
+		A7963DE98A24C815DDBF89A4 /* near-me.png in Resources */ = {isa = PBXBuildFile; fileRef = A796353168380477E69C25A6 /* near-me.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,8 +45,6 @@
 
 /* Begin PBXFileReference section */
 		4A71D28219819713001F11D0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		4A71D2841981A080001F11D0 /* near-me.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "near-me.png"; path = "Resources/Images/near-me.png"; sourceTree = "<group>"; };
-		4A71D2851981A080001F11D0 /* near-me@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "near-me@2x.png"; path = "Resources/Images/near-me@2x.png"; sourceTree = "<group>"; };
 		4AB954301948FAFD009309B6 /* WeatherWatcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherWatcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AB954331948FAFD009309B6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4AB954351948FAFD009309B6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -73,6 +71,8 @@
 		4AB9547C1948FC65009309B6 /* nav-bar-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav-bar-background.png"; sourceTree = "<group>"; };
 		4AB9547D1948FC65009309B6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4AB9547E1948FC65009309B6 /* WeatherWatcher-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "WeatherWatcher-Info.plist"; sourceTree = "<group>"; };
+		A796353168380477E69C25A6 /* near-me.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "near-me.png"; sourceTree = "<group>"; };
+		A7963B87F42DD0074C635CD8 /* near-me@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "near-me@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,8 +104,6 @@
 		4AB954271948FAFD009309B6 = {
 			isa = PBXGroup;
 			children = (
-				4A71D2841981A080001F11D0 /* near-me.png */,
-				4A71D2851981A080001F11D0 /* near-me@2x.png */,
 				4AB954681948FC65009309B6 /* Classes */,
 				4AB9546B1948FC65009309B6 /* Controllers */,
 				4AB954701948FC65009309B6 /* Other Sources */,
@@ -204,6 +202,8 @@
 			children = (
 				4AB9547B1948FC65009309B6 /* default.png */,
 				4AB9547C1948FC65009309B6 /* nav-bar-background.png */,
+				A7963B87F42DD0074C635CD8 /* near-me@2x.png */,
+				A796353168380477E69C25A6 /* near-me.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -284,14 +284,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A71D2871981A080001F11D0 /* near-me@2x.png in Resources */,
-				4A71D2861981A080001F11D0 /* near-me.png in Resources */,
 				4AB954871948FC65009309B6 /* nav-bar-background.png in Resources */,
 				4AB954891948FC65009309B6 /* WeatherWatcher-Info.plist in Resources */,
 				4A71D28319819713001F11D0 /* Localizable.strings in Resources */,
 				4AB954881948FC65009309B6 /* Images.xcassets in Resources */,
 				4AB954851948FC65009309B6 /* InfoPlist.strings in Resources */,
 				4AB954861948FC65009309B6 /* default.png in Resources */,
+				A796390BAF6F92FADDE405D5 /* near-me@2x.png in Resources */,
+				A7963DE98A24C815DDBF89A4 /* near-me.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@
 @interface WeatherMapViewController : BaseUIViewController <MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate>
 {
     MKMapView *districtMapView;
+    UITableView *districtTableView;
     
     CLLocationManager *locationManager;
     NSDate *gpsStartTime;
@@ -20,9 +21,11 @@
     double myLongitude;
     
     UISearchDisplayController *searchBarDisplayController;
+    BOOL toggleSelectionIsList;
 }
 
 @property (nonatomic, strong) UISearchBar *locationSearchBar;
 @property (nonatomic, strong) UIButton *nearMeButton;
+@property (nonatomic, strong) UIBarButtonItem *viewToggleButton;
 
 @end

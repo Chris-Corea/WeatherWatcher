@@ -27,7 +27,7 @@
     self.nearMeButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - (nearMeButtonSize + 4), heightWithNavBar - nearMeButtonSize, nearMeButtonSize, nearMeButtonSize)];
     
     CGRect frame = CGRectMake(0, self.locationSearchBar.height, screenWidth, heightWithNavBar - self.locationSearchBar.height);
-    UITableView *districtTableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+    districtTableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
     districtTableView.delegate = self;
     districtTableView.dataSource = self;
     districtTableView.hidden = YES;
@@ -36,13 +36,31 @@
     districtTableView.backgroundColor = [UIColor clearColor];
     
     districtMapView = [[MKMapView alloc] initWithFrame:frame];
-    districtMapView.delegate = self;
     districtMapView.scrollEnabled = YES;
     districtMapView.zoomEnabled = YES;
     districtMapView.showsUserLocation = YES;
     districtMapView.backgroundColor = [UIColor clearColor];
+
+    [self createBarButton];
+
+    [self.view addSubview:districtMapView];
+    [self.view addSubview:districtTableView];
+    [self.view addSubview:_nearMeButton];
+    [self.view addSubview:_locationSearchBar];
+
+    [self startLocationServices];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    districtMapView.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    districtMapView.delegate = nil;
+    [super viewWillDisappear:animated];
+}
 
 #pragma mark - setup
 
@@ -58,6 +76,14 @@
     searchBarDisplayController.delegate = self;
     searchBarDisplayController.searchResultsDataSource = self;
     searchBarDisplayController.searchResultsDelegate = self;
+}
+
+- (void)createBarButton {
+    self.viewToggleButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ToggleBarButtonTitleList", @"")
+                                                             style:UIBarButtonItemStylePlain target:self action:@selector(toggleView)];
+    self.navigationItem.rightBarButtonItem = _viewToggleButton;
+
+    toggleSelectionIsList = YES;
 }
 
 #pragma mark - tableview datasource methods
@@ -82,6 +108,24 @@
     }
     
     return cell;
+}
+
+#pragma mark - helper methods
+- (void)toggleView {
+    [UIView transitionFromView:(toggleSelectionIsList ? districtMapView : districtTableView)
+                        toView:(toggleSelectionIsList ? districtTableView : districtMapView)
+                      duration:0.6
+                       options:(toggleSelectionIsList ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationOptionTransitionFlipFromRight)
+                    completion:^(BOOL finished) {
+                        if (finished) {
+                            toggleSelectionIsList = !toggleSelectionIsList;
+                            _viewToggleButton.title = NSLocalizedString(@"ToggleBarButtonTitleMap", @"");
+                        }
+    }];
+}
+
+- (void)startLocationServices {
+
 }
 
 #pragma mark - memory management

@@ -11,3 +11,5 @@
 "MapSearchBarAccessibilityLabel"="Enter Zip Code or, if in San Francisco, District Name";
 "SearchResultCellIdentifier"="Search Result Cell Identifier";
 "DistrictCellIdentifier"="District Cell Identifier";
+"ToggleBarButtonTitleMap"="Map";
+"ToggleBarButtonTitleList"="List";
