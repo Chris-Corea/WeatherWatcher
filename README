@@ -1,0 +1,5 @@
+WeatherWatcher is a utility weather app that provides weather information from 
+Weather Underground given a user's location. The initial release will support 
+weather for the user's location and zip code searches, as well as San Francisco
+districts; with the overall goal of incorporating districts or city areas of 
+other cities based on the user's location. 
