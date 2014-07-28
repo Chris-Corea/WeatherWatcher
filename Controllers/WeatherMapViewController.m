@@ -22,9 +22,13 @@
 - (void)loadView {
     [super loadView];
     self.navigationItem.title = NSLocalizedString(@"MapPageTitle", @"");
+    
     [self createSearchDisplayController];
     
     self.nearMeButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - (nearMeButtonSize + 4), heightWithNavBar - nearMeButtonSize, nearMeButtonSize, nearMeButtonSize)];
+    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me-off"] forState:UIControlStateNormal];
+    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me"] forState:UIControlStateSelected];
+    [self.nearMeButton addTarget:self action:@selector(nearMeAction) forControlEvents:UIControlEventTouchUpInside];
     
     CGRect frame = CGRectMake(0, self.locationSearchBar.height, screenWidth, heightWithNavBar - self.locationSearchBar.height);
     districtTableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
@@ -46,9 +50,23 @@
     [self.view addSubview:districtMapView];
     [self.view addSubview:districtTableView];
     [self.view addSubview:_nearMeButton];
-    [self.view addSubview:_locationSearchBar];
+    [self.view addSubview:self.locationSearchBar];
 
     [self startLocationServices];
+    [searchBarDisplayController setActive:NO animated:NO];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+#ifdef __IPHONE_7_0 
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+#endif
+    
+    UIPanGestureRecognizer *panGestureRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanMap:)];
+    panGestureRec.delegate = self;
+    [districtMapView addGestureRecognizer:panGestureRec];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -71,6 +89,7 @@
     self.locationSearchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.locationSearchBar.isAccessibilityElement = YES;
     self.locationSearchBar.accessibilityLabel = NSLocalizedString(@"MapSearchBarAccessibilityLabel", @"");
+    [self.locationSearchBar sizeToFit];
     
     searchBarDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.locationSearchBar contentsController:self];
     searchBarDisplayController.delegate = self;
@@ -80,7 +99,9 @@
 
 - (void)createBarButton {
     self.viewToggleButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ToggleBarButtonTitleList", @"")
-                                                             style:UIBarButtonItemStylePlain target:self action:@selector(toggleView)];
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(toggleView)];
     self.navigationItem.rightBarButtonItem = _viewToggleButton;
 
     toggleSelectionIsList = YES;
@@ -110,6 +131,27 @@
     return cell;
 }
 
+#pragma mark - SearchBar delegate methods
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    _nearMeButton.selected = NO;
+}
+
+#pragma mark - SearchDisplayController delegate methods
+
+
+#pragma mark - MKMapView Delegate methods
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    MKCoordinateRegion region;
+    region.center = mapView.userLocation.coordinate;
+    region.span = MKCoordinateSpanMake(0.1, 0.1);
+    region = [mapView regionThatFits:region];
+    
+    [mapView setRegion:region animated:YES];
+}
+
+
 #pragma mark - helper methods
 - (void)toggleView {
     [UIView transitionFromView:(toggleSelectionIsList ? districtMapView : districtTableView)
@@ -118,14 +160,81 @@
                        options:(toggleSelectionIsList ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationOptionTransitionFlipFromRight)
                     completion:^(BOOL finished) {
                         if (finished) {
+                            _viewToggleButton.title = (toggleSelectionIsList ?
+                                                       NSLocalizedString(@"ToggleBarButtonTitleList", @"") : NSLocalizedString(@"ToggleBarButtonTitleMap", @""));
+                            _nearMeButton.hidden = !_nearMeButton.hidden;
                             toggleSelectionIsList = !toggleSelectionIsList;
-                            _viewToggleButton.title = NSLocalizedString(@"ToggleBarButtonTitleMap", @"");
                         }
     }];
 }
 
-- (void)startLocationServices {
+- (void)nearMeAction {
+    [self clearSearchBarText];
+    [self startLocationServices];
+}
 
+- (void)clearSearchBarText {
+    self.locationSearchBar.text = @"";
+}
+
+- (void)startLocationServices {
+    if ([CLLocationManager locationServicesEnabled]) {
+        _nearMeButton.selected = !_nearMeButton.selected;
+        
+        if (_nearMeButton.selected) {
+            DLog(@"starting location services");
+            // start updating the user's location
+            if (!locationManager) {
+                locationManager = [[CLLocationManager alloc] init];
+            }
+            locationManager.delegate = self;
+            self.gpsStartTime = [NSDate date];
+            [locationManager startUpdatingLocation];
+            [NSThread detachNewThreadSelector:@selector(locationTimer) toTarget:self withObject:nil];
+        } else {
+            [locationManager stopUpdatingLocation];
+            locationManager.delegate = NO;
+        }
+        
+    } else {
+        //TODO: show a message saying locations is turned off
+        DLog(@"Locations is turned off or disallowed on this device");
+    }
+}
+
+- (void)locationTimer {
+    @autoreleasepool {
+        NSDate *startTimer = [NSDate date];
+        while ([[NSDate date] timeIntervalSinceDate:startTimer] < kLocationsTimeout && !finishedUpdatingLocation) {
+            [NSThread sleepForTimeInterval:1.0];
+        }
+        if (!finishedUpdatingLocation) {
+            [self performSelectorOnMainThread:@selector(locationServicesTimedOut) withObject:self waitUntilDone:NO];
+        }
+    }
+}
+
+- (void)locationServicesTimedOut {
+    finishedUpdatingLocation = YES;
+    //TODO: show a banner with error message
+}
+
+- (void)didPanMap:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        DLog(@"map region changed");
+        _nearMeButton.selected = NO;
+    }
+}
+
+- (void)zoomMapToUserLocation:(MKMapView *)mapView {
+    if ([mapView.annotations count] == 0) return;
+    
+    
+}
+
+#pragma mark - gesture recognizer delegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
 }
 
 #pragma mark - memory management

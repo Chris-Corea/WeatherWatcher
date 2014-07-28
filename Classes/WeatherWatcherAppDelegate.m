@@ -30,12 +30,13 @@
 - (void)customizeAppearance {
     id navigationBarAppearance = [UINavigationBar appearance];
     [navigationBarAppearance setBackgroundImage:[UIImage imageNamed:@"nav-bar-background"] forBarMetrics:UIBarMetricsDefault];
-    [navigationBarAppearance setTitleTextAttributes:[self getTitleTextAttributes]];
+    [navigationBarAppearance setTitleTextAttributes:[self getNavBarTitleTextAttributes]];
 
-    id barButtonItemAppearance = [UIButton]
+    id barButtonItemAppearance = [UIBarButtonItem appearance];
+    [barButtonItemAppearance setTitleTextAttributes:[self getBarButtonTitleTextAttributes] forState:UIControlStateNormal];
 }
 
-- (NSDictionary *)getTitleTextAttributes {
+- (NSDictionary *)getNavBarTitleTextAttributes {
     NSShadow *shadow = [[NSShadow alloc] init];
     shadow.shadowColor = RGBA(0, 0, 0, .1);
     shadow.shadowOffset = CGSizeMake(1.0, 1.0);
@@ -44,6 +45,13 @@
              NSForegroundColorAttributeName : [UIColor whiteColor],
              NSFontAttributeName: [UIFont boldSystemFontOfSize:16.0f],
              NSShadowAttributeName: shadow
+             };
+}
+
+- (NSDictionary *)getBarButtonTitleTextAttributes {
+    return @{
+             NSForegroundColorAttributeName : [UIColor whiteColor],
+             NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f]
              };
 }
 

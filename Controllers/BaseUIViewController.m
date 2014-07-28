@@ -31,15 +31,15 @@
     self.view = myView;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    DLog(@"\n\n=============%@=============\n\n", self);
-    [super viewWillAppear:animated];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    DLog(@"\n\n=============%@=============\n\n", self);
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

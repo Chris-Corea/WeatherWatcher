@@ -10,22 +10,24 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface WeatherMapViewController : BaseUIViewController <MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface WeatherMapViewController : BaseUIViewController <MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
     MKMapView *districtMapView;
     UITableView *districtTableView;
     
     CLLocationManager *locationManager;
-    NSDate *gpsStartTime;
     double myLatitude;
     double myLongitude;
     
     UISearchDisplayController *searchBarDisplayController;
+    
     BOOL toggleSelectionIsList;
+    BOOL finishedUpdatingLocation;
 }
 
 @property (nonatomic, strong) UISearchBar *locationSearchBar;
 @property (nonatomic, strong) UIButton *nearMeButton;
 @property (nonatomic, strong) UIBarButtonItem *viewToggleButton;
+@property (nonatomic, strong) NSDate *gpsStartTime;
 
 @end
