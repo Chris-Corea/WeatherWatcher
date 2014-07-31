@@ -8,6 +8,7 @@
 
 #import "WeatherMapViewController.h"
 #import "UIView+ViewAdditions.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 #define kLocationsTimeout 60
 #define nearMeButtonSize 52
@@ -25,16 +26,10 @@
     
     [self createSearchDisplayController];
     
-    self.nearMeButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - (nearMeButtonSize + 4), heightWithNavBar - nearMeButtonSize, nearMeButtonSize, nearMeButtonSize)];
-    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me-off"] forState:UIControlStateNormal];
-    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me"] forState:UIControlStateSelected];
-    [self.nearMeButton addTarget:self action:@selector(nearMeAction) forControlEvents:UIControlEventTouchUpInside];
-    
     CGRect frame = CGRectMake(0, self.locationSearchBar.height, screenWidth, heightWithNavBar - self.locationSearchBar.height);
     districtTableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
     districtTableView.delegate = self;
     districtTableView.dataSource = self;
-    districtTableView.hidden = YES;
     districtTableView.bounces = YES;
     districtTableView.tableFooterView = [[UIView alloc] init];
     districtTableView.backgroundColor = [UIColor clearColor];
@@ -44,12 +39,17 @@
     districtMapView.zoomEnabled = YES;
     districtMapView.showsUserLocation = YES;
     districtMapView.backgroundColor = [UIColor clearColor];
+    districtMapView.alpha = 1.0f;
+    
+    self.nearMeButton = [[UIButton alloc] initWithFrame:CGRectMake(screenWidth - (nearMeButtonSize + 4), frame.size.height - nearMeButtonSize, nearMeButtonSize, nearMeButtonSize)];
+    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me-off"] forState:UIControlStateNormal];
+    [self.nearMeButton setImage:[UIImage imageNamed:@"near-me"] forState:UIControlStateSelected];
+    [self.nearMeButton addTarget:self action:@selector(nearMeAction) forControlEvents:UIControlEventTouchUpInside];
 
     [self createBarButton];
 
     [self.view addSubview:districtMapView];
-    [self.view addSubview:districtTableView];
-    [self.view addSubview:_nearMeButton];
+    [districtMapView addSubview:_nearMeButton];
     [self.view addSubview:self.locationSearchBar];
 
     [self startLocationServices];
@@ -64,9 +64,8 @@
     }
 #endif
     
-    UIPanGestureRecognizer *panGestureRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanMap:)];
-    panGestureRec.delegate = self;
-    [districtMapView addGestureRecognizer:panGestureRec];
+    [self setupPanGesture];
+    [self fetchWeatherInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -113,6 +112,8 @@
     NSInteger rows = 0;
     if (tableView == searchBarDisplayController.searchResultsTableView) {
         // possibly handle this case if api sends back multiple results for a query
+    } else {
+        rows = 1;
     }
     return rows;
 }
@@ -126,6 +127,10 @@
         
     } else { // we're in the district list
         cell = [tableView dequeueReusableCellWithIdentifier:NSLocalizedString(@"DistrictCellIdentifier", @"")];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSLocalizedString(@"DistrictCellIdentifier", @"")];
+        }
+        cell.textLabel.text = @"hello";
     }
     
     return cell;
@@ -226,10 +231,24 @@
     }
 }
 
-- (void)zoomMapToUserLocation:(MKMapView *)mapView {
+- (void)zoomMapToFitAnnotations:(MKMapView *)mapView {
     if ([mapView.annotations count] == 0) return;
     
     
+}
+
+
+- (void)setupPanGesture {
+    UIPanGestureRecognizer *panGestureRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanMap:)];
+    panGestureRec.delegate = self;
+    [districtMapView addGestureRecognizer:panGestureRec];
+}
+
+- (void)fetchWeatherInfo {
+    UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+    NSURL *url = [NSURL URLWithString:@"http://placekitten.com/g/100/200"];
+    [image setImageWithURL:url placeholderImage:[UIImage imageNamed:@"near-me"]];
+    [districtTableView setTableHeaderView:image];
 }
 
 #pragma mark - gesture recognizer delegate

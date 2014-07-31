@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>42A8319A-1A2B-4E4C-9809-B0B459ED9851</string>
+	<key>IDESourceControlProjectName</key>
+	<string>WeatherWatcher</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>00E513C7-18E4-406F-B0E4-6C1B48AE8A91</key>
+		<string>ssh://github.com/Chris-Corea/WeatherWatcher.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>WeatherWatcher.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>00E513C7-18E4-406F-B0E4-6C1B48AE8A91</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/Chris-Corea/WeatherWatcher.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>00E513C7-18E4-406F-B0E4-6C1B48AE8A91</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>00E513C7-18E4-406F-B0E4-6C1B48AE8A91</string>
+			<key>IDESourceControlWCCName</key>
+			<string>WeatherWatcher</string>
+		</dict>
+	</array>
+</dict>
+</plist>
