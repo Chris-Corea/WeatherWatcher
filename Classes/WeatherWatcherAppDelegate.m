@@ -34,6 +34,8 @@
 
     id barButtonItemAppearance = [UIBarButtonItem appearance];
     [barButtonItemAppearance setTitleTextAttributes:[self getBarButtonTitleTextAttributes] forState:UIControlStateNormal];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 - (NSDictionary *)getNavBarTitleTextAttributes {
