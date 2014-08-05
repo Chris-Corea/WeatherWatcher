@@ -14,6 +14,7 @@
 {
     MKMapView *districtMapView;
     UITableView *districtTableView;
+    UIView *infoPage;
     
     CLLocationManager *locationManager;
     double myLatitude;
@@ -28,6 +29,7 @@
 @property (nonatomic, strong) UISearchBar *locationSearchBar;
 @property (nonatomic, strong) UIButton *nearMeButton;
 @property (nonatomic, strong) UIBarButtonItem *viewToggleButton;
+@property (nonatomic, strong) UIBarButtonItem *infoButton;
 @property (nonatomic, strong) NSDate *gpsStartTime;
 
 @end

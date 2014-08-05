@@ -9,6 +9,8 @@
 #import "WeatherMapViewController.h"
 #import "UIView+ViewAdditions.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import <AFNetworking.h>
+#import "WeatherWatcherInfoPageViewController.h"
 
 #define kLocationsTimeout 60
 #define nearMeButtonSize 52
@@ -46,7 +48,7 @@
     [self.nearMeButton setImage:[UIImage imageNamed:@"near-me"] forState:UIControlStateSelected];
     [self.nearMeButton addTarget:self action:@selector(nearMeAction) forControlEvents:UIControlEventTouchUpInside];
 
-    [self createBarButton];
+    [self createBarButtons];
 
     [self.view addSubview:districtMapView];
     [districtMapView addSubview:_nearMeButton];
@@ -96,14 +98,16 @@
     searchBarDisplayController.searchResultsDelegate = self;
 }
 
-- (void)createBarButton {
+- (void)createBarButtons {
     self.viewToggleButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"ToggleBarButtonTitleList", @"")
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(toggleView)];
     self.navigationItem.rightBarButtonItem = _viewToggleButton;
-
     toggleSelectionIsList = YES;
+    
+    self.infoButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info"] style:UIBarButtonItemStylePlain target:self action:@selector(showInfoPage)];
+    self.navigationItem.leftBarButtonItem = _infoButton;
 }
 
 #pragma mark - tableview datasource methods
@@ -171,6 +175,10 @@
                             toggleSelectionIsList = !toggleSelectionIsList;
                         }
     }];
+}
+
+- (void)showInfoPage {
+    [self.navigationController presentViewController:[[WeatherWatcherInfoPageViewController alloc] init] animated:YES completion:nil];
 }
 
 - (void)nearMeAction {
@@ -245,10 +253,12 @@
 }
 
 - (void)fetchWeatherInfo {
-    UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
-    NSURL *url = [NSURL URLWithString:@"http://placekitten.com/g/100/200"];
-    [image setImageWithURL:url placeholderImage:[UIImage imageNamed:@"near-me"]];
-    [districtTableView setTableHeaderView:image];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:@"http://localhost:8080" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DLog(@"Error: %@", error);
+    }];
 }
 
 #pragma mark - gesture recognizer delegate
